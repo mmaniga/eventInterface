@@ -7,7 +7,7 @@ import java.util.Map;
 public class Event {
     private String type;
     private String message;
-    //private Map<String, Object> source;
+    private Map<String, String> source;
 
     public String getType() {
         return type;
@@ -25,4 +25,11 @@ public class Event {
         this.message = message;
     }
 
+    public Map<String, String> getSource() {
+        return source;
+    }
+
+    public void setSource(Map<String, String> source) {
+        this.source = source;
+    }
 }
