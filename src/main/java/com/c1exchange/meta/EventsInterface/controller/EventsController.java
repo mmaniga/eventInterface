@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.segment.analytics.Analytics;
+import com.segment.analytics.messages.*;
+import java.util.Map;
 
 @RestController
 public class EventsController {
@@ -19,22 +22,22 @@ public class EventsController {
     @Autowired
     KafkaAdmin kafkaAdmin;
 
-    @GetMapping("/event")
-    public String event() {
-        Event event = new Event();
-        kafkaTemplate.send("page",event);
-        return event.toString();
-    }
 
     @PostMapping("/events")
-    public String events(@RequestBody Event event) {
+    public String events(@RequestBody Map<String, Object> event) {
         try {
-            kafkaTemplate.send("page",event);
+            Event transferedMessage = new Event();
+            String eventType = event.get("type").toString();
+            transferedMessage.setType(eventType);
+            transferedMessage.setMessage("Empty"); // Not sure why message is used in Event..
+            transferedMessage.setSource(event);
+            kafkaTemplate.send(eventType,transferedMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "Json Message posted success";
     }
+
 
     @GetMapping("/createTopic")
     public String createTopic(){

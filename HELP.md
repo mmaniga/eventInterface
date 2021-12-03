@@ -39,3 +39,13 @@ bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic page --from-beginning
 ##### To delete topic
 bin/kafka-topics.sh --bootstrap-server=localhost:9092 --topic page --delete
+
+##### Post message
+```json
+{
+"type":"page",
+"message":"Test message",
+"source":
+{"name":"Mani","age":"20"}
+}
+```
