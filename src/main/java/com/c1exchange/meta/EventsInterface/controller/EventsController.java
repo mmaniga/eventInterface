@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.segment.analytics.Analytics;
 import com.segment.analytics.messages.*;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
@@ -23,19 +22,24 @@ public class EventsController {
     KafkaAdmin kafkaAdmin;
 
 
-    @PostMapping("/events")
-    public String events(@RequestBody Map<String, Object> event) {
+    @PostMapping(path= "/events", consumes="application/json" )
+    public void events(@RequestHeader(name="access-key", required = true) String accessKey,
+                         HttpServletResponse response,
+                         @RequestBody Map<String, Object> event) {
         try {
-            Event transferedMessage = new Event();
+            if(accessKey.isEmpty() || accessKey.isBlank()) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
+            Event transferredMessage = new Event();
             String eventType = event.get("type").toString();
-            transferedMessage.setType(eventType);
-            transferedMessage.setMessage("Empty"); // Not sure why message is used in Event..
-            transferedMessage.setSource(event);
-            kafkaTemplate.send(eventType,transferedMessage);
+            transferredMessage.setType(eventType);
+            transferredMessage.setMessage("Empty"); // Not sure why message is used in Event..
+            transferredMessage.setSource(event);
+            kafkaTemplate.send(eventType,transferredMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "Json Message posted success";
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
 
