@@ -1,17 +1,15 @@
 package com.c1exchange.meta.EventsInterface.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Entity
+@Table(name = "connected_source")
 public class SourceDto {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String key;
     private Long accountId;
