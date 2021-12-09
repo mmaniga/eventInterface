@@ -1,5 +1,5 @@
 package com.c1exchange.meta.EventsInterface.dto;
-
+/*
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,3 +48,4 @@ public class SourceDto {
     }
 }
 
+*/

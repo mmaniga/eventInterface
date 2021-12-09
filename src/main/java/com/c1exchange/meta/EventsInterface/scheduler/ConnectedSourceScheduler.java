@@ -2,7 +2,7 @@ package com.c1exchange.meta.EventsInterface.scheduler;
 
 import com.c1exchange.meta.EventsInterface.entity.ConnectedSource;
 import com.c1exchange.meta.EventsInterface.repository.ConnectedSourceRepository;
-import com.c1exchange.meta.EventsInterface.repository.SourceDtoRepository;
+//import com.c1exchange.meta.EventsInterface.repository.SourceDtoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,8 +16,8 @@ import java.util.Set;
 @Component
 public class ConnectedSourceScheduler {
 
-   //@Autowired
-   //private ConnectedSourceRepository connectedSourceRepository;
+   @Autowired
+   private ConnectedSourceRepository connectedSourceRepository;
 
    @Autowired
    private RedisTemplate redisTemplate;
@@ -27,7 +27,7 @@ public class ConnectedSourceScheduler {
     public void tenSecIntervalPrinting() {
         System.out.println("Printing in Scheduler...");
         System.out.println("Reading from database");
-        //connectedSourceRepository.findAll().forEach(x -> System.out.println(x));
+        connectedSourceRepository.findAll().forEach(x -> System.out.println(x));
         System.out.println("Checking Key Exists in Redis");
         Set<byte[]> keys = redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes());
         Iterator<byte[]> it = keys.iterator();

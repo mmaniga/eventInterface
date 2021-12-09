@@ -1,6 +1,6 @@
 package com.c1exchange.meta.EventsInterface;
 
-import com.c1exchange.meta.EventsInterface.repository.SourceDtoRepository;
+//import com.c1exchange.meta.EventsInterface.repository.SourceDtoRepository;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -14,9 +14,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 @SpringBootApplication
 @EnableScheduling
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class EventsInterfaceApplication {
 	//@Autowired
 	//SourceDtoRepository sourceDtoRepository;
