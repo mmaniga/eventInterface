@@ -14,9 +14,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.scheduling.annotation.EnableScheduling;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableScheduling
+//@EnableSwagger2
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class EventsInterfaceApplication {
 	//@Autowired
