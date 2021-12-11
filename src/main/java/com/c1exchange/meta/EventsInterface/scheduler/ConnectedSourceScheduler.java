@@ -23,18 +23,18 @@ public class ConnectedSourceScheduler {
     @Autowired
     private ConnectedSourceRepository connectedSourceRepository;
 
-   @Autowired
-   private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
-   @Scheduled(fixedDelayString =  "PT10M")
-   public void scheduleLoadConnectedSource() {
-       logger.info("Getting into scheduleLoadConnectedSource");
-   }
+    @Scheduled(fixedDelayString = "PT10M")
+    public void scheduleLoadConnectedSource() {
+        logger.info("Getting into scheduleLoadConnectedSource");
+    }
 
-    @Scheduled(fixedDelayString = "PT10.000S")
+    @Scheduled(fixedDelayString = "PT60.000S")
     public void tenSecIntervalPrinting() {
-       logger.info("Getting into tenSecIntervalPrinting");
+        logger.info("Getting into tenSecIntervalPrinting");
         System.out.println("Printing in Scheduler...");
         System.out.println("Reading from database");
         connectedSourceRepository.findAll().forEach(x -> System.out.println(x.getAccountId()));
@@ -43,13 +43,12 @@ public class ConnectedSourceScheduler {
         Iterator<byte[]> it = keys.iterator();
         StringBuffer sb = new StringBuffer();
 
-        while(it.hasNext()){
+        while (it.hasNext()) {
 
-            byte[] data = (byte[])it.next();
+            byte[] data = (byte[]) it.next();
             sb.append(new String(data, 0, data.length));
         }
         System.out.println(sb.toString());
-
 
 
         System.out.println("Reading from database completed..");
