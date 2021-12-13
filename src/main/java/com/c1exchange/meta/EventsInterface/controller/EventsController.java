@@ -1,5 +1,6 @@
 package com.c1exchange.meta.EventsInterface.controller;
 
+import com.c1exchange.meta.EventsInterface.Constants;
 import com.c1exchange.meta.EventsInterface.dto.Event;
 import com.c1exchange.meta.EventsInterface.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class EventsController {
             //     return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED,"Event Not Posted"),HttpStatus.UNAUTHORIZED);
             // }
             Event transferredMessage = new Event();
-            String eventType = event.get("type").toString();
+            String eventType = event.get(Constants.EVENT_TYPE).toString();
             transferredMessage.setType(eventType);
             transferredMessage.setMessage("Empty"); // Not sure why message is used in Event..
             transferredMessage.setSource(event);

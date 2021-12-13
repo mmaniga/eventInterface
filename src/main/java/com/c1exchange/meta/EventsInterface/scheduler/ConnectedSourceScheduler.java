@@ -1,15 +1,24 @@
 package com.c1exchange.meta.EventsInterface.scheduler;
 
+import com.c1exchange.meta.EventsInterface.dto.Event;
+import com.c1exchange.meta.EventsInterface.entity.ConnectedSource;
+import com.c1exchange.meta.EventsInterface.entity.ConnectedSourceRedis;
+import com.c1exchange.meta.EventsInterface.filters.SourceKeyFilter;
 import com.c1exchange.meta.EventsInterface.repository.ConnectedSourceRepository;
+import com.c1exchange.meta.EventsInterface.repository.SourceKeyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisHashCommands;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Component
 public class ConnectedSourceScheduler {
@@ -22,6 +31,8 @@ public class ConnectedSourceScheduler {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private SourceKeyRepository sourceKeyRepository;
 
     /*
     https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true#parse-java.lang.CharSequence-
@@ -57,6 +68,56 @@ public class ConnectedSourceScheduler {
             sb.append(new String(data, 0, data.length));
         }
         System.out.println(sb.toString());
+
+        System.out.println("USing Redis Hash");
+
+        StringRedisTemplate redisTemplate1 = new StringRedisTemplate();
+        redisTemplate1.setConnectionFactory(redisTemplate.getConnectionFactory());
+        redisTemplate1.setKeySerializer(new StringRedisSerializer());
+        redisTemplate1.setValueSerializer(new StringRedisSerializer());
+        redisTemplate1.afterPropertiesSet();
+
+        RedisHashCommands hashOperations = redisTemplate1.getConnectionFactory().getConnection().hashCommands();
+        HashOperations hashOperations1 = redisTemplate1.opsForHash();
+        //Map<String,String>  connectedSource =  (Map)hashOperations1.get("ConnectedSource","01926aae-d4f9-5dc2-8391-fe2f90d64776");
+        //System.out.println("connected Source " + connectedSource);
+
+
+        Map<String,Map> ent = hashOperations1.entries("ConnectedSource");
+        ent.entrySet().forEach((e -> {
+            System.out.println(e.getKey().toString() + " : " +e.getValue() );
+        }));
+
+        System.out.println("Getting from other method");
+        ConnectedSourceRedis c = new ConnectedSourceRedis();
+        c.setAccountId("QQQQL");
+        c.setId("1111");
+       // c.setKey("abc");
+      //  c.setStatus("active");
+        sourceKeyRepository.save(c);
+        System.out.println("save complete");
+        System.out.println("read");
+        Optional<ConnectedSourceRedis> cc = sourceKeyRepository.findById("1111");
+        System.out.println("find got");
+        System.out.println(cc.get().getId());
+        //Map<String,String> connectedSource = sourceKeyRepository.getSourceKey("ConnectedSource");
+
+        /*Map<String, String> entr = hashOperations.hGetAll("ConnectedSource".getBytes(StandardCharsets.UTF_8));
+
+        entr.entrySet().forEach((e -> {
+            System.out.println(e.getKey().toString());
+            System.out.println(e.getValue());
+        }));
+
+
+        System.out.println(entr.size());
+
+         */
+        //Map<String,String> connectedSource = sourceKeyRepository.getSourceKey("ConnectedSource");
+        //System.out.println(event);
+        //event.entrySet().forEach(entry -> {
+       //     System.out.println(entry.getKey() + " " + entry.getValue());
+        //});
 
 
         System.out.println("Reading from database completed..");

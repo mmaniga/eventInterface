@@ -14,4 +14,6 @@ public class Constants {
 
     public static final String ERROR_MESSAGE = "Something went wrong!!!. Please contact administrator!";
 
+    public static final String EVENT_TYPE = "type";
+
 }
