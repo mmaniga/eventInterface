@@ -1,7 +1,5 @@
 package com.c1exchange.meta.EventsInterface.dto;
 
-import org.springframework.util.StringUtils;
-
 import java.util.Map;
 
 public class Event {

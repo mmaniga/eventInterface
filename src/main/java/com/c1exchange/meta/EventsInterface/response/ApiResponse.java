@@ -19,7 +19,7 @@ public class ApiResponse {
     private String message;
     private Object data;
 
-    public ApiResponse(HttpStatus status,Object data) {
+    public ApiResponse(HttpStatus status, Object data) {
         this.status = status;
         if (status.is2xxSuccessful())
             this.message = Constants.SUCCESS;
@@ -28,29 +28,37 @@ public class ApiResponse {
         this.timestamp = LocalDateTime.now();
         this.data = data;
     }
+
     public HttpStatus getStatus() {
         return status;
     }
+
     public void setStatus(HttpStatus status) {
         this.status = status;
     }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }
+
     public Object getData() {
         Map<String, Object> dataMap = new HashMap<String, Object>();
-        dataMap.put(Constants.RESPONSE,data);
+        dataMap.put(Constants.RESPONSE, data);
         return dataMap;
     }
+
     public void setData(Object data) {
         this.data = data;
     }

@@ -5,14 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import com.segment.analytics.Analytics;
-import com.segment.analytics.messages.*;
 
 @Component
 public class KafkaConsumer {
 
     // Note: How is this group anc container factor determined...
-    @KafkaListener(groupId = "eventInterfaceGroup-1",topics = "page", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(groupId = "eventInterfaceGroup-1", topics = "page", containerFactory = "kafkaListenerContainerFactory")
     public void receiveMessage(Event message) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(message);

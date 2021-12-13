@@ -3,8 +3,6 @@ package com.c1exchange.meta.EventsInterface;
 public class Constants {
 
 
-
-
     public static final String REQUEST_START_TIME = "Request_start_Time";
 
     public static final String SUCCESS = "Success";

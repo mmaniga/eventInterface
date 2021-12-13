@@ -1,6 +1,7 @@
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Gradle documentation](https://docs.gradle.org)
@@ -14,6 +15,7 @@ For further reference, please consider the following sections:
 * [Apache Kafka Streams Binding Capabilities of Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_kafka_streams_binding_capabilities_of_spring_cloud_stream)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
@@ -25,22 +27,29 @@ The following guides illustrate how to use some features concretely:
 * [Samples for using Apache Kafka Streams with Spring Cloud stream](https://github.com/spring-cloud/spring-cloud-stream-samples/tree/master/kafka-streams-samples)
 
 ### Additional Links
+
 These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 
-
 ### Development Notes
 
 #### Kakfa
+
 ##### To list Topics
+
 bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
+
 ##### To list all messages in topic
+
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic page --from-beginning
+
 ##### To delete topic
+
 bin/kafka-topics.sh --bootstrap-server=localhost:9092 --topic page --delete
 
 ##### Post message
+
 ```json
 {
 "type":"page",
