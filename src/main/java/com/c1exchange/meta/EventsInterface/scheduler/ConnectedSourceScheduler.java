@@ -57,6 +57,8 @@ public class ConnectedSourceScheduler {
         // Every interval do this periodically
         // if data not in cache read from database.
 
+        // They are saved as hash to to get from cli use hget key field or with field or hgetall key
+        // use type key function to know the type of key in redis..\
 
         connectedSourceRepository.findAll().forEach(x -> {
             System.out.println("Processing account " + x.getAccountId() +" into Redis");
@@ -72,84 +74,16 @@ public class ConnectedSourceScheduler {
         System.out.println("For Testing - Getting back from Redis");
         sourceKeyRepository.findAll().forEach(x -> {
             System.out.println("------------------------------");
-            System.out.println(x.getAccountId());
-            System.out.println(x.getId());
-            System.out.println(x.getKey());
-            System.out.println(x.getName());
-            System.out.println(x.getStatus());
+            System.out.println(String.format(" AccountId : %s, Id : %s, Key : %s, Name : %s, Status : %s ",
+                    x.getAccountId(),x.getId(), x.getKey(), x.getName(), x.getStatus()));
         });
+
+        System.out.println("getting by key - Direct call");
+        Optional<ConnectedSource> cs =  connectedSourceRepository.findById(17L);
+        ConnectedSource ccs = cs.get();
+        System.out.println(String.format(" AccountId : %s, Id : %s, Key : %s, Name : %s, Status : %s ",
+                ccs.getAccountId(),ccs.getId(), ccs.getKey(), ccs.getName(), ccs.getStatus()));
 
     }
 
-    @Scheduled(fixedDelayString = "PT600.000S")
-    public void tenSecIntervalPrinting() {
-        logger.info("Getting into tenSecIntervalPrinting");
-        System.out.println("Reading from database");
-        connectedSourceRepository.findAll().forEach(x -> {
-            System.out.println(x.getAccountId());
-        });
-        System.out.println("Checking Key Exists in Redis");
-        Set<byte[]> keys = redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes());
-        Iterator<byte[]> it = keys.iterator();
-        StringBuffer sb = new StringBuffer();
-
-        while (it.hasNext()) {
-            byte[] data = (byte[]) it.next();
-            sb.append(new String(data, 0, data.length));
-        }
-        System.out.println(sb.toString());
-
-        System.out.println("USing Redis Hash");
-
-        StringRedisTemplate redisTemplate1 = new StringRedisTemplate();
-        redisTemplate1.setConnectionFactory(redisTemplate.getConnectionFactory());
-        redisTemplate1.setKeySerializer(new StringRedisSerializer());
-        redisTemplate1.setValueSerializer(new StringRedisSerializer());
-        redisTemplate1.afterPropertiesSet();
-
-        RedisHashCommands hashOperations = redisTemplate1.getConnectionFactory().getConnection().hashCommands();
-        HashOperations hashOperations1 = redisTemplate1.opsForHash();
-        //Map<String,String>  connectedSource =  (Map)hashOperations1.get("ConnectedSource","01926aae-d4f9-5dc2-8391-fe2f90d64776");
-        //System.out.println("connected Source " + connectedSource);
-
-
-        Map<String,Map> ent = hashOperations1.entries("ConnectedSource");
-        ent.entrySet().forEach((e -> {
-            System.out.println(e.getKey().toString() + " : " +e.getValue() );
-        }));
-
-        System.out.println("Getting from other method");
-        ConnectedSourceRedis c = new ConnectedSourceRedis();
-        c.setAccountId("QQQQL");
-        c.setId("1111");
-       // c.setKey("abc");
-      //  c.setStatus("active");
-        sourceKeyRepository.save(c);
-        System.out.println("save complete");
-        System.out.println("read");
-        Optional<ConnectedSourceRedis> cc = sourceKeyRepository.findById("1111");
-        System.out.println("find got");
-        System.out.println(cc.get().getId());
-        //Map<String,String> connectedSource = sourceKeyRepository.getSourceKey("ConnectedSource");
-
-        /*Map<String, String> entr = hashOperations.hGetAll("ConnectedSource".getBytes(StandardCharsets.UTF_8));
-
-        entr.entrySet().forEach((e -> {
-            System.out.println(e.getKey().toString());
-            System.out.println(e.getValue());
-        }));
-
-
-        System.out.println(entr.size());
-
-         */
-        //Map<String,String> connectedSource = sourceKeyRepository.getSourceKey("ConnectedSource");
-        //System.out.println(event);
-        //event.entrySet().forEach(entry -> {
-       //     System.out.println(entry.getKey() + " " + entry.getValue());
-        //});
-
-
-        System.out.println("Reading from database completed..");
-    }
 }
