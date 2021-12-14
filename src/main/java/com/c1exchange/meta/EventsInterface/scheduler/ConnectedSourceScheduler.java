@@ -32,6 +32,9 @@ public class ConnectedSourceScheduler {
     private RedisTemplate redisTemplate;
 
     @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
     private SourceKeyRepository sourceKeyRepository;
 
     /*
@@ -46,24 +49,51 @@ public class ConnectedSourceScheduler {
     "-P6H3M"    -- parses as "-6 hours and -3 minutes"
     "-P-6H+3M"  -- parses as "+6 hours and -3 minutes"
      */
-    @Scheduled(fixedDelayString = "PT10M")
+    @Scheduled(fixedDelayString = "PT1M")
     public void scheduleLoadConnectedSource() {
         logger.info("Getting into scheduleLoadConnectedSource");
+
+        // Read from mysql and load into redis
+        // Every interval do this periodically
+        // if data not in cache read from database.
+
+
+        connectedSourceRepository.findAll().forEach(x -> {
+            System.out.println("Processing account " + x.getAccountId() +" into Redis");
+            ConnectedSourceRedis connectedSourceRedis = new ConnectedSourceRedis();
+            connectedSourceRedis.setId(x.getId().toString());
+            connectedSourceRedis.setAccountId(x.getAccountId().toString());
+            connectedSourceRedis.setKey(x.getKey());
+            connectedSourceRedis.setName(x.getName());
+            connectedSourceRedis.setStatus(x.getStatus());
+            sourceKeyRepository.save(connectedSourceRedis);
+        });
+
+        System.out.println("For Testing - Getting back from Redis");
+        sourceKeyRepository.findAll().forEach(x -> {
+            System.out.println("------------------------------");
+            System.out.println(x.getAccountId());
+            System.out.println(x.getId());
+            System.out.println(x.getKey());
+            System.out.println(x.getName());
+            System.out.println(x.getStatus());
+        });
+
     }
 
-    @Scheduled(fixedDelayString = "PT60.000S")
+    @Scheduled(fixedDelayString = "PT600.000S")
     public void tenSecIntervalPrinting() {
         logger.info("Getting into tenSecIntervalPrinting");
-        System.out.println("Printing in Scheduler...");
         System.out.println("Reading from database");
-        connectedSourceRepository.findAll().forEach(x -> System.out.println(x.getAccountId()));
+        connectedSourceRepository.findAll().forEach(x -> {
+            System.out.println(x.getAccountId());
+        });
         System.out.println("Checking Key Exists in Redis");
         Set<byte[]> keys = redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes());
         Iterator<byte[]> it = keys.iterator();
         StringBuffer sb = new StringBuffer();
 
         while (it.hasNext()) {
-
             byte[] data = (byte[]) it.next();
             sb.append(new String(data, 0, data.length));
         }
