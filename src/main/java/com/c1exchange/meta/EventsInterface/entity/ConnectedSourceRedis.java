@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
@@ -11,10 +12,11 @@ import java.io.Serializable;
 
 @RedisHash("ConnectedSourceRedis")
 public class ConnectedSourceRedis implements Serializable {
+    @Id
+    private String key;
     private String id;
     private String name;
     private String accountId;
-    private String key;
     private String status;
 
 

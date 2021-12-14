@@ -8,5 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SourceKeyRepository extends CrudRepository<ConnectedSourceRedis, String> {
-    }
+public interface ConnectedSourceRedisRepository extends CrudRepository<ConnectedSourceRedis, String> {
+    @Override
+    Optional<ConnectedSourceRedis> findById(String s);
+}

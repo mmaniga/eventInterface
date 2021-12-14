@@ -1,23 +1,16 @@
 package com.c1exchange.meta.EventsInterface.scheduler;
 
-import com.c1exchange.meta.EventsInterface.dto.Event;
-import com.c1exchange.meta.EventsInterface.entity.ConnectedSource;
 import com.c1exchange.meta.EventsInterface.entity.ConnectedSourceRedis;
-import com.c1exchange.meta.EventsInterface.filters.SourceKeyFilter;
 import com.c1exchange.meta.EventsInterface.repository.ConnectedSourceRepository;
-import com.c1exchange.meta.EventsInterface.repository.SourceKeyRepository;
+import com.c1exchange.meta.EventsInterface.repository.ConnectedSourceRedisRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisHashCommands;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Component
@@ -35,7 +28,7 @@ public class ConnectedSourceScheduler {
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
-    private SourceKeyRepository sourceKeyRepository;
+    private ConnectedSourceRedisRepository connectedSourceRedisRepository;
 
     /*
     https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true#parse-java.lang.CharSequence-
@@ -68,22 +61,24 @@ public class ConnectedSourceScheduler {
             connectedSourceRedis.setKey(x.getKey());
             connectedSourceRedis.setName(x.getName());
             connectedSourceRedis.setStatus(x.getStatus());
-            sourceKeyRepository.save(connectedSourceRedis);
+            connectedSourceRedisRepository.save(connectedSourceRedis);
         });
 
         System.out.println("For Testing - Getting back from Redis");
-        sourceKeyRepository.findAll().forEach(x -> {
+        connectedSourceRedisRepository.findAll().forEach(x -> {
             System.out.println("------------------------------");
             System.out.println(String.format(" AccountId : %s, Id : %s, Key : %s, Name : %s, Status : %s ",
                     x.getAccountId(),x.getId(), x.getKey(), x.getName(), x.getStatus()));
         });
 
         System.out.println("getting by key - Direct call");
-        Optional<ConnectedSource> cs =  connectedSourceRepository.findById(17L);
-        ConnectedSource ccs = cs.get();
-        System.out.println(String.format(" AccountId : %s, Id : %s, Key : %s, Name : %s, Status : %s ",
-                ccs.getAccountId(),ccs.getId(), ccs.getKey(), ccs.getName(), ccs.getStatus()));
-
+        try {
+            ConnectedSourceRedis cs =  connectedSourceRedisRepository.findById("68790909-02eb-59c0-ac3a-cc64fa47b5e9").get();
+            System.out.println(String.format(" AccountId : %s, Id : %s, Key : %s, Name : %s, Status : %s ",
+                    cs.getAccountId(), cs.getId(), cs.getKey(), cs.getName(), cs.getStatus()));
+        }catch (NoSuchElementException e) {
+            System.out.println("Element not present in redis");
+        }
     }
 
 }

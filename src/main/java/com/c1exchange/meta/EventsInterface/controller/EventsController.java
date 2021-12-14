@@ -25,13 +25,9 @@ public class EventsController {
 
 
     @PostMapping(path = "/events", consumes = "application/json")
-    public ResponseEntity<ApiResponse> events(@RequestHeader(name = "access-key", required = true) String accessKey,
+    public ResponseEntity<ApiResponse> events(@RequestHeader(name = "access_key", required = true) String accessKey,
                                               @RequestBody Map<String, Object> event) {
         try {
-            // Done using the SourceKeyFilter
-            // if(accessKey.isEmpty() || accessKey.isBlank()) {
-            //     return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED,"Event Not Posted"),HttpStatus.UNAUTHORIZED);
-            // }
             Event transferredMessage = new Event();
             String eventType = event.get(Constants.EVENT_TYPE).toString();
             transferredMessage.setType(eventType);
