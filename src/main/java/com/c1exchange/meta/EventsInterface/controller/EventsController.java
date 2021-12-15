@@ -25,7 +25,7 @@ public class EventsController {
 
 
     @PostMapping(path = "/events", consumes = "application/json")
-    public ResponseEntity<ApiResponse> events(@RequestHeader(name = "access_key", required = true) String accessKey,
+    public ResponseEntity<ApiResponse> events(@RequestHeader(name = Constants.ACCESS_KEY, required = true) String accessKey,
                                               @RequestBody Map<String, Object> event) {
         try {
             Event transferredMessage = new Event();

@@ -1,5 +1,6 @@
 package com.c1exchange.meta.EventsInterface.filters;
 
+import com.c1exchange.meta.EventsInterface.Constants;
 import com.c1exchange.meta.EventsInterface.entity.ConnectedSourceRedis;
 import com.c1exchange.meta.EventsInterface.repository.ConnectedSourceRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class SourceKeyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        String accessKey = ((HttpServletRequest) request).getHeader("access_key");
+        String accessKey = ((HttpServletRequest) request).getHeader(Constants.ACCESS_KEY);
 
         if (accessKey != null && !accessKey.isBlank() && !accessKey.isEmpty()) {
             try {
