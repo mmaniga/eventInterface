@@ -38,15 +38,18 @@ These additional references should also help you:
 
 ##### To list Topics
 
-bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
+* bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
 
 ##### To list all messages in topic
 
-bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic page --from-beginning
+* bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic page --from-beginning
 
 ##### To delete topic
 
-bin/kafka-topics.sh --bootstrap-server=localhost:9092 --topic page --delete
+* bin/kafka-topics.sh --bootstrap-server=localhost:9092 --topic page --delete
+
+##### Testing
+* [Postman collection](https://go.postman.co/workspace/My-Workspace~b6be29c1-82d7-4b88-8f57-c5390df0507b/collection/1889609-527d66b4-f85a-4001-83e4-c206301ee6ca)
 
 ##### Post message
 
