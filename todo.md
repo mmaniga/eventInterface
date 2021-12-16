@@ -10,3 +10,6 @@
 - [ ] Configuration for scheduler
 - [ ] Auto scale scripts
 - [ ] Metrics
+- [ ] Remove ip address and pwd from configuration
+- [ ] Don't commit env / profile - use spring profile
+- [ ] Move code to private repositorys
